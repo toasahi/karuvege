@@ -1,24 +1,23 @@
 #include <Wire.h>
-#include <LiquidCrystal_I2C.h>
- 
-const unsigned int ADDRESS = 0x27;
-const int CHARS_NUM = 16;
-const int LINES_NUM = 2;
- 
-LiquidCrystal_I2C lcd(ADDRESS, CHARS_NUM, LINES_NUM);
- 
+#include <ST7032.h>
+
+ST7032 lcd;
+
 void setup() {
-  Serial.begin(115200);
-  lcd.init();
-  lcd.backlight();
-}
- 
-void loop() {
+  // LCD表示領域設定(8桁, 2行)
+  lcd.begin(8, 2);
+
+  // コントラスト設定(0〜63)
+  lcd.setContrast(30);
+
+  // LCD表示(1行目)
   lcd.setCursor(0, 0);
-  lcd.print("Hello World!");
- 
+  lcd.print("I Love");
+
+  // LCD表示(2行目)
   lcd.setCursor(0, 1);
-  lcd.print("DISP TEST");
- 
-  delay(100);
+  lcd.print("Arduino!");
+}
+
+void loop() {
 }
