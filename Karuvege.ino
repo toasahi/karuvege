@@ -10,11 +10,11 @@ void setup() {
   // コントラスト設定(0〜63)
   lcd.setContrast(30);
 
-  // LCD表示(1行目)
+  // (1行目)
   lcd.setCursor(0, 0);
   lcd.print("I Love");
 
-  // LCD表示(2行目)
+  // (2行目)
   lcd.setCursor(0, 1);
   lcd.print("Arduino!");
 }
