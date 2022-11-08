@@ -1,6 +1,8 @@
 #include <Wire.h>
 #include <ST7032.h>
+#include "getData.h"
 #include <HTTPClient.h>
+
 #define JST 3600*9 //日本標準時子午線
 #define uS_TO_S_FACTOR 1000000ULL //マイクロ->秒に変換係数
 
@@ -11,6 +13,8 @@ WiFiClientSecure client;
 //WiFi設定
 const char ssid[] = "C0p2Ec2-WLAN";
 const char password[] = "4Emah5LdS";
+
+static const char *wd[7] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 
 ST7032 lcd;
 
@@ -40,30 +44,24 @@ void setup() {
 
   // コントラスト設定(0〜63)
   lcd.setContrast(30);
-  
+
 }
 
 void loop() {
-  time_t t;
-  struct tm *tm;
-  static const char *wd[7] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
-  t = time(NULL);
-  tm = localtime(&t);
-  Serial.printf(" %04d/%02d/%02d(%s) %02d:%02d:%02d\n",
-                tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday,
-                wd[tm->tm_wday],
-                tm->tm_hour, tm->tm_min, tm->tm_sec);
+  unsigned long currentHour = getTime("hour");
+  unsigned long currentMin = getTime("min");
+  unsigned long currentDay = getTime("day");
+  //  unsigned long currentMin = t->tm_min;
 
-  unsigned long currentHour = tm->tm_hour;
-  unsigned long currentMin = tm->tm_min;
-  
   lcd.setCursor(0, 0);
   lcd.print(currentHour);
   lcd.print(":");
   lcd.print(currentMin);
 
-  
+  Serial.print(currentDay);
+
+
   // (2行目)
   lcd.setCursor(0, 1);
-  lcd.print(wd[tm->tm_wday]);
+  lcd.print(wd[currentDay]);
 }
