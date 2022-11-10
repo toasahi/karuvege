@@ -15,7 +15,7 @@ const char *wd[7] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 
 //WiFi設定
 const char ssid[] = "C0p2Ec2-WLAN";
-const char password[] = "4Emah5LdS";
+const char password[] = "d6ad418b63849f1d5c2fb20b3389c60787a9504bbe8900e77f4b6871fbc9da48";
 
 void setup() {
   Serial.begin(115200);
