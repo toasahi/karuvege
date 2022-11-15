@@ -66,11 +66,21 @@ void loop() {
   }
   // (2行目)
   lcd.setCursor(0, 1);
-  lcd.print(wd[currentDay]);
-
-  digitalWrite(moterPin, HIGH);
-  delay(2000);
-  digitalWrite(moterPin, LOW);
-  delay(2000);
+  lcd.print(wd[currentDay]); 
+  
   lcd.clear();
+  
+}
+
+/* モーターを回転させる
+ * int flag 停止：0 開始:1 
+ */
+
+void moterControl(int flag){
+  if(flag){
+    digitalWrite(moterPin, HIGH);
+  }else{
+    digitalWrite(moterPin, LOW);
+  }
+  delay(100);
 }
