@@ -1,14 +1,11 @@
 #include "Getdata.h"
 
-unsigned long getTime(String label) {
+void getCurrentTime(unsigned long currentTime[3]) {
   time_t t;
   struct tm *tm;
   t = time(NULL);
   tm = localtime(&t);
-  if (label == "hour") {
-    return tm->tm_hour;
-  } else if (label == "min") {
-    return tm->tm_min;
-  };
-  return tm->tm_wday;
+  currentTime[0] = tm->tm_hour;
+  currentTime[1] = tm->tm_min;
+  currentTime[2] =tm->tm_wday;
 }

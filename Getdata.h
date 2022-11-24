@@ -1,1 +1,1 @@
-unsigned long getTime(String label);
+void getCurrentTime(unsigned long currentTime[3]);

@@ -19,9 +19,11 @@ const char password[] = "d6ad418b63849f1d5c2fb20b3389c60787a9504bbe8900e77f4b687
 
 const int moterPin = 16;
 
-unsigned long currentHour ;
-unsigned long currentMin ;
-unsigned long currentDay ;
+unsigned long currentHour;
+unsigned long currentMin;
+unsigned long currentDay;
+
+unsigned long currentTime[3];
 
 void setup() {
   Serial.begin(115200);
@@ -65,13 +67,14 @@ void setup() {
 }
 
 void loop() {
-  currentHour = getTime("hour");
-  currentMin = getTime("min");
-  currentDay = getTime("day");
+  getCurrentTime(currentTime);
+  currentHour = currentTime[0];
+  currentMin = currentTime[1];
+  currentDay = currentTime[2];
 
   //(1行目)
   lcd.setCursor(0, 0);
-  if (currentMin < 9) {
+  if (currentTime[1] < 9) {
     lcd.printf("%d:0%d", currentHour, currentMin);
   } else {
     lcd.printf("%d:%d", currentHour, currentMin);
