@@ -74,7 +74,7 @@ void loop() {
 
   //(1行目)
   lcd.setCursor(0, 0);
-  if (currentTime[1] < 9) {
+  if (currentMin < 9) {
     lcd.printf("%d:0%d", currentHour, currentMin);
   } else {
     lcd.printf("%d:%d", currentHour, currentMin);

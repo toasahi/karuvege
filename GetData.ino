@@ -1,5 +1,11 @@
 #include "Getdata.h"
 
+/* 現在時間を取得する関数
+   currentTime[0] 時
+   currentTime[1] 分
+   currentTime[2] 曜日の曜日
+*/
+
 void getCurrentTime(unsigned long currentTime[3]) {
   time_t t;
   struct tm *tm;
