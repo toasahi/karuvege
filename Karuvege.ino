@@ -63,7 +63,11 @@ void setup() {
 
   delay(10000);
 
+  getCurrentTime(currentTime);
+
   lcd.clear();
+  WiFi.disconnect(true);
+  WiFi.mode(WIFI_OFF);
 }
 
 void loop() {
