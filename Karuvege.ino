@@ -19,6 +19,12 @@ const char password[] = "d6ad418b63849f1d5c2fb20b3389c60787a9504bbe8900e77f4b687
 
 const int moterPin = 16;
 
+unsigned long currentHour;
+unsigned long currentMin;
+unsigned long currentDay;
+
+unsigned long currentTime[3];
+
 void setup() {
   Serial.begin(115200);
   //WiFi接続
@@ -48,14 +54,27 @@ void setup() {
   // コントラスト設定(0〜63)
   lcd.setContrast(30);
 
-  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.printf("Temp:%dC", 20);
 
+  lcd.setCursor(0, 1);
+  lcd.printf("Hum:%d", 55);
+  lcd.print("%");
+
+  delay(10000);
+
+  getCurrentTime(currentTime);
+
+  lcd.clear();
+  WiFi.disconnect(true);
+  WiFi.mode(WIFI_OFF);
 }
 
 void loop() {
-  unsigned long currentHour = getTime("hour");
-  unsigned long currentMin = getTime("min");
-  unsigned long currentDay = getTime("day");
+  getCurrentTime(currentTime);
+  currentHour = currentTime[0];
+  currentMin = currentTime[1];
+  currentDay = currentTime[2];
 
   //(1行目)
   lcd.setCursor(0, 0);
