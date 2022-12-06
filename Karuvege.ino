@@ -1,11 +1,16 @@
 #include <Wire.h>
+#include <Preferences.h>
 #include <ST7032.h>
-#include "Getdata.h"
+#include <EEPROM.h>
 #include <HTTPClient.h>
+
+#include "Getdata.h"
 
 //Wifi
 HTTPClient http;
 WiFiClientSecure client;
+
+Preferences preferences;
 
 ST7032 lcd;
 
@@ -19,11 +24,14 @@ const char password[] = "d6ad418b63849f1d5c2fb20b3389c60787a9504bbe8900e77f4b687
 
 const int moterPin = 16;
 
-unsigned long currentHour;
-unsigned long currentMin;
-unsigned long currentDay;
+int currentHour;
+int currentMin;
+int currentDay;
 
-unsigned long currentTime[3];
+const int timeSize = 6;
+int currentTime[timeSize];
+int saveTime[timeSize];
+
 
 void setup() {
   Serial.begin(115200);
@@ -61,20 +69,25 @@ void setup() {
   lcd.printf("Hum:%d", 55);
   lcd.print("%");
 
+  // 10秒間気温と湿度を表示する
   delay(10000);
 
-  getCurrentTime(currentTime);
-
   lcd.clear();
+
+  EEPROM.begin(16); 
+  // 一旦WiFiの接続を止める
   WiFi.disconnect(true);
   WiFi.mode(WIFI_OFF);
+
+  saveEepromTime();
+  readEepromTime();
 }
 
 void loop() {
   getCurrentTime(currentTime);
-  currentHour = currentTime[0];
-  currentMin = currentTime[1];
-  currentDay = currentTime[2];
+  currentHour = currentTime[3];
+  currentMin = currentTime[4];
+  currentDay = currentTime[5];
 
   //(1行目)
   lcd.setCursor(0, 0);
@@ -102,4 +115,33 @@ void moterControl(int flag) {
     digitalWrite(moterPin, LOW);
   }
   delay(100);
+}
+
+void saveEepromTime(){
+
+  // 現在の時刻を取得
+  getCurrentTime(currentTime);
+
+  int n = 0;
+  for (int i = 0; i < timeSize; i++) {
+    EEPROM.put(n, currentTime[i]);
+    n += 4; // 4バイト毎
+  }
+  EEPROM.commit(); // EEPROMに書き込み確定
+}
+
+void readEepromTime(){
+
+int n = 0;
+  for (int i = 0; i < timeSize; i++) {
+    EEPROM.get(n, saveTime[i]); // EEPROMより読み込み
+    n += 4; // 4バイト毎
+  }
+  Serial.println(saveTime[0]);
+  Serial.println(saveTime[1]);
+  Serial.println(saveTime[2]);
+  Serial.println(saveTime[3]);
+  Serial.println(saveTime[4]);
+  Serial.println(saveTime[5]);
+
 }
