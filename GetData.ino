@@ -14,25 +14,12 @@ void getCurrentTime(int currentTime[6]) {
 
   //  double test = difftime(t,1669864160);
   //  Serial.println(test);
-
-
-  //  currentTime[0] = tm->tm_hour;
-  //  currentTime[1] = tm->tm_min;
-  //  currentTime[2] =tm->tm_wday;
-
-  int timeYear = tm->tm_year + 1900;
-  int timeMonth = tm->tm_mon + 1;
-  int timeDay = tm->tm_mday;
-  int timeHour = tm->tm_hour;
-  int timeMin = tm->tm_min;
-  int timeWday = tm->tm_wday;
-
   
-  currentTime[0] = timeYear;
-  currentTime[1] = timeMonth;
-  currentTime[2] = timeDay;
-  currentTime[3] = timeHour;
-  currentTime[4] = timeMin;
-  currentTime[5] = timeWday;
+  currentTime[0] = tm->tm_year + 1900;
+  currentTime[1] = tm->tm_mon + 1;
+  currentTime[2] = tm->tm_mday;
+  currentTime[3] = tm->tm_hour;
+  currentTime[4] = tm->tm_min;
+  currentTime[5] = tm->tm_wday;
   
 }
