@@ -49,7 +49,7 @@ int currentHour;
 int currentMin;
 int currentDay;
 
-const int timeSize = 6;
+const int timeSize = 7;
 int currentTime[timeSize];
 int saveTime[timeSize];
 
@@ -110,7 +110,7 @@ void loop() {
   getCurrentTime(currentTime);
   currentHour = currentTime[3];
   currentMin = currentTime[4];
-  currentDay = currentTime[5];
+  currentDay = currentTime[6];
 
   //(1行目)
   lcd.setCursor(0, 0);
@@ -124,7 +124,7 @@ void loop() {
   lcd.print(wd[currentDay]);
 
   //temp();
-  Serial.println(analogRead(voutPin));
+//  Serial.println(analogRead(voutPin));
 
   delay(1000);
   lcd.clear();
@@ -169,5 +169,5 @@ int n = 0;
   Serial.println(saveTime[3]);
   Serial.println(saveTime[4]);
   Serial.println(saveTime[5]);
-
+  Serial.println(saveTime[6]);
 }
