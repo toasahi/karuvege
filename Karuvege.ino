@@ -56,6 +56,9 @@ const int timeSize = 3;
 // EEPROMのキー
 int timeKey = 0;
 
+// 苗を植えたときの日付が保存されているか
+int timeStatus = 0;
+
 // ミリ秒を日に変換する定数
 const unsigned long conversionMillsToDate = 86400000;
 
@@ -78,7 +81,7 @@ void setup() {
     }
   }
   Serial.println("Connected");
-  //
+  
   //日本時間の設定
   configTime( JST, 0, "ntp.nict.jp", "time.google.com", "ntp.jst.mfeed.ad.jp");
   configTzTime("JST-9", "ntp.nict.jp", "time.google.com", "ntp.jst.mfeed.ad.jp");
@@ -104,11 +107,12 @@ void setup() {
   lcd.clear();
 
   EEPROM.begin(16);
+  
   // 一旦WiFiの接続を止める
   WiFi.disconnect(true);
   WiFi.mode(WIFI_OFF);
 
-  saveNumberOfDaysUsed(timeKey);
+  saveNumberOfDaysUsed(timeKey,timeStatus);
   delay(2000);
   int days = getNumberOfDaysUsed(timeKey);
 }

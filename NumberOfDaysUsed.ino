@@ -3,14 +3,21 @@
    timeKey キーになる
 */
 
-void saveNumberOfDaysUsed(int timeKey) {
+void saveNumberOfDaysUsed(int timeKey,int timeStatus) {
 
   // 開始時間
   unsigned long startTime;
   // 時間を測定する
   startTime = millis();
-  EEPROM.put(timeKey, startTime);
 
+  EEPROM.get(timeKey+4, timeStatus);
+
+  if(timeStatus != 1){
+    EEPROM.put(timeKey, startTime);
+    EEPROM.put(timeKey+4, 1);
+    Serial.println("test");
+  }
+  Serial.println(timeStatus);
   // 書き込み確定
   EEPROM.commit();
 }
