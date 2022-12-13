@@ -20,7 +20,7 @@ void saveNumberOfDaysUsed(int timeKey) {
 */
 
 int getNumberOfDaysUsed(int timeKey) {
-  
+
   // 終了時間と開始時刻を取得する変数
   unsigned long endTime, getStartTime;
   EEPROM.get(timeKey, getStartTime);
@@ -30,6 +30,6 @@ int getNumberOfDaysUsed(int timeKey) {
 
   // 何日経っているかの計算
   int dayCount = endTime / conversionMillsToDate;
-  
+
   return dayCount;
 }
