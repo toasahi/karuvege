@@ -1,4 +1,7 @@
-//#include <EEPROM.h>
+
+/* 現在時間を保存する
+   timeKey キーになる
+*/
 
 void saveNumberOfDaysUsed(int timeKey) {
 
@@ -11,6 +14,10 @@ void saveNumberOfDaysUsed(int timeKey) {
   // 書き込み確定
   EEPROM.commit();
 }
+
+/* 利用した日数を取得する
+   timeKey キーになる
+*/
 
 int getNumberOfDaysUsed(int timeKey) {
   

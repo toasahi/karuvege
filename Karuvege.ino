@@ -2,6 +2,7 @@
 #include <Preferences.h>
 #include <ST7032.h>
 #include <EEPROM.h>
+
 #include <HTTPClient.h>
 
 #include "Getdata.h"
@@ -107,12 +108,9 @@ void setup() {
   WiFi.disconnect(true);
   WiFi.mode(WIFI_OFF);
 
-    saveNumberOfDaysUsed(timeKey);
-    delay(2000);
-    int days = getNumberOfDaysUsed(timeKey);
-//  saveEepromTime();
-//  delay(2000);
-//  readEepromTime();
+  saveNumberOfDaysUsed(timeKey);
+  delay(2000);
+  int days = getNumberOfDaysUsed(timeKey);
 }
 
 void loop() {
@@ -120,9 +118,6 @@ void loop() {
   currentHour = currentTime[0];
   currentMin = currentTime[1];
   currentDay = currentTime[2];
-
-  Serial.print(currentHour);
-  Serial.print("時");
 
   //(1行目)
   lcd.setCursor(0, 0);
@@ -154,29 +149,3 @@ void moterControl(int flag) {
   }
   delay(100);
 }
-
-//void saveEepromTime() {
-//
-//  // 開始時間
-//  unsigned long startTime;
-//  // 時間を測定する
-//  startTime = millis();
-//  EEPROM.put(timeKey, startTime);
-//
-//  // 書き込み確定
-//  EEPROM.commit();
-//}
-//
-//void readEepromTime() {
-//
-//  // 終了時間と開始時刻を取得する変数
-//  unsigned long endTime, getStartTime;
-//  EEPROM.get(timeKey, getStartTime);
-//
-//  // 何ミリ秒経っているかを計算
-//  endTime = millis() - getStartTime;
-//
-//  // 何日経っているかの計算
-//  dayCount = endTime / conversionMillsToDate;
-//
-//}
