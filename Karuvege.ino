@@ -178,7 +178,6 @@ int n = 0;
    boolean flag 停止：0 開始:1
 */
 
-
 void temperatureFanControl(boolean flag){
   if (flag) {
     digitalWrite(temperatureFanPin, HIGH);
