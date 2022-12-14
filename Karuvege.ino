@@ -44,6 +44,7 @@ void temp(){
 }
 
 const int moterPin = 16;
+const int temperatureFanPin = 17;
 
 int currentHour;
 int currentMin;
@@ -180,9 +181,9 @@ int n = 0;
 
 void temperatureFanControl(boolean flag){
   if (flag) {
-    digitalWrite(moterPin, HIGH);
+    digitalWrite(temperatureFanPin, HIGH);
   } else {
-    digitalWrite(moterPin, LOW);
+    digitalWrite(temperatureFanPin, LOW);
   }
   delay(100);
 }
