@@ -27,7 +27,7 @@ const char password[] = "d6ad418b63849f1d5c2fb20b3389c60787a9504bbe8900e77f4b687
 
 
 //温度センサの値を取得する関数
-void temp() {
+void temp(){
 
   // R1の電圧を取得
   float reading = analogRead(voutPin);
@@ -40,11 +40,10 @@ void temp() {
   //float temprature = (voltage - 424) / 6.25//T = ( Vo-424[mV] ) / 6.25[mV]
 
   Serial.println(reading);
-
+  
 }
 
 const int moterPin = 16;
-const int temperatureFanPin = 17;
 
 int currentHour;
 int currentMin;
@@ -73,7 +72,7 @@ void setup() {
     }
   }
   Serial.println("Connected");
-  //
+//
   //日本時間の設定
   configTime( JST, 0, "ntp.nict.jp", "time.google.com", "ntp.jst.mfeed.ad.jp");
   configTzTime("JST-9", "ntp.nict.jp", "time.google.com", "ntp.jst.mfeed.ad.jp");
@@ -98,7 +97,7 @@ void setup() {
 
   lcd.clear();
 
-  EEPROM.begin(16);
+  EEPROM.begin(16); 
   // 一旦WiFiの接続を止める
   WiFi.disconnect(true);
   WiFi.mode(WIFI_OFF);
@@ -144,7 +143,7 @@ void moterControl(int flag) {
   delay(100);
 }
 
-void saveEepromTime() {
+void saveEepromTime(){
 
   // 現在の時刻を取得
   getCurrentTime(currentTime);
@@ -157,9 +156,9 @@ void saveEepromTime() {
   EEPROM.commit(); // EEPROMに書き込み確定
 }
 
-void readEepromTime() {
+void readEepromTime(){
 
-  int n = 0;
+int n = 0;
   for (int i = 0; i < timeSize; i++) {
     EEPROM.get(n, saveTime[i]); // EEPROMより読み込み
     n += 4; // 4バイト毎
@@ -171,18 +170,4 @@ void readEepromTime() {
   Serial.println(saveTime[4]);
   Serial.println(saveTime[5]);
 
-}
-
-
-/* ファンを回転させる
-   boolean flag 停止：0 開始:1
-*/
-
-void temperatureFanControl(boolean flag) {
-  if (flag) {
-    digitalWrite(temperatureFanPin, HIGH);
-  } else {
-    digitalWrite(temperatureFanPin, LOW);
-  }
-  delay(100);
 }
