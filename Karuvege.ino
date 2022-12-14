@@ -171,3 +171,18 @@ int n = 0;
   Serial.println(saveTime[5]);
 
 }
+
+
+/* ファンを回転させる
+   boolean flag 停止：0 開始:1
+*/
+
+
+void temperatureFanControl(boolean flag){
+  if (flag) {
+    digitalWrite(moterPin, HIGH);
+  } else {
+    digitalWrite(moterPin, LOW);
+  }
+  delay(100);
+}
