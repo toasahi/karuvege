@@ -27,23 +27,10 @@ const char *wd[7] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 const char ssid[] = "C0p2Ec2-WLAN";
 const char password[] = "d6ad418b63849f1d5c2fb20b3389c60787a9504bbe8900e77f4b6871fbc9da48";
 
-
-//温度センサの値を取得する関数
-void temp() {
-
-  // R1の電圧を取得
-  float reading = analogRead(voutPin);
-
-  // AD値をmVに変換
-  //float voltage = ((long)reading * VOLT * 1000) / ANALOG_MAX;
-
-  //温度を算出
-  //float temprature = (voltage - 424) / 6.25 //LM60BIZのデータシートにあった　VO = (+6.25 mV/°C × T °C) + 424 mV　という式を参考にしました。
-  //float temprature = (voltage - 424) / 6.25//T = ( Vo-424[mV] ) / 6.25[mV]
-
-  Serial.println(reading);
-
-}
+//取得した電圧の変数
+int tempAnalogReading;
+//電圧から算出した温度の変数
+int temperature;
 
 const int moterPin = 16;
 
@@ -88,6 +75,8 @@ void setup() {
 
   pinMode(moterPin, OUTPUT);
 
+  getTemperature(); //温度センサ関数
+
   // LCD表示領域設定(8桁, 2行)
   lcd.begin(8, 2);
 
@@ -95,7 +84,7 @@ void setup() {
   lcd.setContrast(30);
 
   lcd.setCursor(0, 0);
-  lcd.printf("Temp:%dC", 20);
+  lcd.printf("Temp:%dC", temperature);
 
   lcd.setCursor(0, 1);
   lcd.printf("Hum:%d", 55);
@@ -134,8 +123,7 @@ void loop() {
   lcd.setCursor(0, 1);
   lcd.print(wd[currentDay]);
 
-  //temp();
-  //  Serial.println(analogRead(voutPin));
+ getTemperature(); //温度センサ関数
 
   delay(1000);
   lcd.clear();
@@ -152,4 +140,18 @@ void moterControl(int flag) {
     digitalWrite(moterPin, LOW);
   }
   delay(100);
+}
+
+//温度センサの値を取得する関数
+void getTemperature(){
+  
+
+  tempAnalogReading = analogRead(voutPin);
+
+  //温度を算出
+  temperature = (tempAnalogReading - 424) / 6.25; //LM60BIZのデータシートにあった　VO = (+6.25 mV/°C × T °C) + 424 mV　という式を参考にしました。
+
+  Serial.println("電圧：" + String(tempAnalogReading) + "mV");
+  Serial.println("温度：" + String(temperature) + "℃");
+  
 }
