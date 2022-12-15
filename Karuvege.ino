@@ -33,6 +33,7 @@ int tempAnalogReading;
 int temperature;
 
 const int moterPin = 16;
+const int temperatureFanPin = 17;
 
 int currentHour;
 int currentMin;
@@ -154,4 +155,18 @@ void getTemperature(){
   Serial.println("電圧：" + String(tempAnalogReading) + "mV");
   Serial.println("温度：" + String(temperature) + "℃");
   
+}
+
+
+/* ファンを回転させる
+   boolean flag 停止：0 開始:1
+*/
+
+void temperatureFanControl(boolean flag){
+  if (flag) {
+    digitalWrite(temperatureFanPin, HIGH);
+  } else {
+    digitalWrite(temperatureFanPin, LOW);
+  }
+  delay(100);
 }
