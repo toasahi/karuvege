@@ -142,35 +142,6 @@ void moterControl(int flag) {
   delay(100);
 }
 
-void saveEepromTime(){
-
-  // 現在の時刻を取得
-  getCurrentTime(currentTime);
-
-  int n = 0;
-  for (int i = 0; i < timeSize; i++) {
-    EEPROM.put(n, currentTime[i]);
-    n += 4; // 4バイト毎
-  }
-  EEPROM.commit(); // EEPROMに書き込み確定
-}
-
-void readEepromTime(){
-
-int n = 0;
-  for (int i = 0; i < timeSize; i++) {
-    EEPROM.get(n, saveTime[i]); // EEPROMより読み込み
-    n += 4; // 4バイト毎
-  }
-  Serial.println(saveTime[0]);
-  Serial.println(saveTime[1]);
-  Serial.println(saveTime[2]);
-  Serial.println(saveTime[3]);
-  Serial.println(saveTime[4]);
-  Serial.println(saveTime[5]);
-
-}
-
 //温度センサの値を取得する関数
 void getTemperature(){
   
