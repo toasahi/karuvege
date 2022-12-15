@@ -2,9 +2,11 @@
 #include <Preferences.h>
 #include <ST7032.h>
 #include <EEPROM.h>
+
 #include <HTTPClient.h>
 
 #include "Getdata.h"
+#include "NumberOfDaysUsed.h"
 
 //Wifi
 HTTPClient http;
@@ -36,11 +38,18 @@ int currentHour;
 int currentMin;
 int currentDay;
 
-const int timeSize = 6;
+const int timeSize = 3;
+
+// EEPROMのキー
+int timeKey = 0;
+
+// 苗を植えたときの日付が保存されているか
+int timeStatus = 0;
+
+// ミリ秒を日に変換する定数
+const unsigned long conversionMillsToDate = 86400000;
+
 int currentTime[timeSize];
-int saveTime[timeSize];
-
-
 
 void setup() {
   Serial.begin(115200);
@@ -59,7 +68,7 @@ void setup() {
     }
   }
   Serial.println("Connected");
-//
+  
   //日本時間の設定
   configTime( JST, 0, "ntp.nict.jp", "time.google.com", "ntp.jst.mfeed.ad.jp");
   configTzTime("JST-9", "ntp.nict.jp", "time.google.com", "ntp.jst.mfeed.ad.jp");
@@ -86,20 +95,22 @@ void setup() {
 
   lcd.clear();
 
-  EEPROM.begin(16); 
+  EEPROM.begin(16);
+  
   // 一旦WiFiの接続を止める
   WiFi.disconnect(true);
   WiFi.mode(WIFI_OFF);
 
-  saveEepromTime();
-  readEepromTime();
+  saveNumberOfDaysUsed(timeKey,timeStatus);
+  delay(2000);
+  int days = getNumberOfDaysUsed(timeKey);
 }
 
 void loop() {
   getCurrentTime(currentTime);
-  currentHour = currentTime[3];
-  currentMin = currentTime[4];
-  currentDay = currentTime[5];
+  currentHour = currentTime[0];
+  currentMin = currentTime[1];
+  currentDay = currentTime[2];
 
   //(1行目)
   lcd.setCursor(0, 0);
