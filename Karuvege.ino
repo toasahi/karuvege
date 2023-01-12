@@ -39,7 +39,7 @@ int currentHour;
 int currentMin;
 int currentDay;
 
-const int timeSize = 3;
+const int timeSize = 6;
 
 // EEPROMのキー
 int timeKey = 0;
@@ -97,18 +97,19 @@ void setup() {
   lcd.clear();
 
   EEPROM.begin(16);
+
+  getCurrentTime(currentTime);
   
   // 一旦WiFiの接続を止める
   WiFi.disconnect(true);
   WiFi.mode(WIFI_OFF);
 
-  saveNumberOfDaysUsed(timeKey,timeStatus);
+  saveNumberOfDaysUsed(timeKey,timeStatus,currentTime[3],currentTime[4],currentTime[5]);
   delay(2000);
-  int days = getNumberOfDaysUsed(timeKey);
+  int days = getNumberOfDaysUsed(timeKey,currentTime[3],currentTime[4],currentTime[5]);
 }
 
 void loop() {
-  getCurrentTime(currentTime);
   currentHour = currentTime[0];
   currentMin = currentTime[1];
   currentDay = currentTime[2];
@@ -152,8 +153,8 @@ void getTemperature(){
   //温度を算出
   temperature = (tempAnalogReading - 424) / 6.25; //LM60BIZのデータシートにあった　VO = (+6.25 mV/°C × T °C) + 424 mV　という式を参考にしました。
 
-  Serial.println("電圧：" + String(tempAnalogReading) + "mV");
-  Serial.println("温度：" + String(temperature) + "℃");
+//  Serial.println("電圧：" + String(tempAnalogReading) + "mV");
+//  Serial.println("温度：" + String(temperature) + "℃");
   
 }
 

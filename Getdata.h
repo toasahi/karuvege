@@ -1,1 +1,1 @@
-void getCurrentTime(int currentTime[3]);
+void getCurrentTime(int currentTime[6]);
