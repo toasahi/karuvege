@@ -18,9 +18,11 @@ void saveNumberOfDaysUsed(int timeKey, int timeStatus, int oldYear, int oldMonth
   // 書き込み確定
 }
 
+/* その年に閏年があるか
+   int uruYear 年
+*/
 
-
-int isLeapYear(int uruYear) {
+private int isLeapYear(int uruYear) {
   if ((uruYear % 4 == 0 && uruYear % 100 != 0) || uruYear % 400 == 0) {
     return 1;
   } else {
@@ -30,29 +32,21 @@ int isLeapYear(int uruYear) {
 
 
 /* 利用した日数を取得する
-   timeKey キーになる
+   int timeKey キーになる(0,1)
+   int currentYear 現在の年代
+   int currentMonth　現在の月
+   int currentDay　現在の日
 */
 
 int getNumberOfDaysUsed(int timeKey, int currentYear, int currentMonth, int currentDay) {
-
-  //  // 終了時間と開始時刻を取得する変数
-  //  unsigned long endTime, getStartTime;
-  //  EEPROM.get(timeKey, getStartTime);
-  //
-  //  // 何ミリ秒経っているかを計算
-  //  endTime = millis() - getStartTime;
-  //
-  //  // 何日経っているかの計算
-  //  int dayCount = endTime / conversionMillsToDate;
-  //
-  //  return dayCount;
-
+  
   int yearStart, monthStart, dayStart;
   int yearDiff;
   int uruFlag;
   int uruCount = 0;
 
-  int tukihi[] = {0, 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334};
+  //1月〜12月までの日数
+  int tukihi[] = {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334};
 
   EEPROM.get(timeKey, yearStart);
   EEPROM.get(timeKey + 4, monthStart);
@@ -63,8 +57,8 @@ int getNumberOfDaysUsed(int timeKey, int currentYear, int currentMonth, int curr
   Serial.printf("currentYear:%d,currentMonth:%d,currentDay:%d", currentYear, currentMonth, currentDay);
   Serial.println("");
 
-  dayStart += tukihi[monthStart];
-  currentDay += tukihi[currentMonth];
+  dayStart += tukihi[monthStart-1];
+  currentDay += tukihi[currentMonth-1];
 
   yearDiff = currentYear - yearStart;
 
