@@ -1,6 +1,10 @@
 
 /* 現在時間を保存する
    timeKey キーになる
+   int timeStatus (0:保存されていない,1:保存されている),
+   int oldYear 初回起動の時の年
+   int oldMonth 初回起動の時の月
+   int oldDay 初回起動の時の日
 */
 
 void saveNumberOfDaysUsed(int timeKey, int timeStatus, int oldYear, int oldMonth, int oldDay) {
@@ -22,7 +26,7 @@ void saveNumberOfDaysUsed(int timeKey, int timeStatus, int oldYear, int oldMonth
    int uruYear 年
 */
 
-private int isLeapYear(int uruYear) {
+int isLeapYear(int uruYear) {
   if ((uruYear % 4 == 0 && uruYear % 100 != 0) || uruYear % 400 == 0) {
     return 1;
   } else {
@@ -32,15 +36,15 @@ private int isLeapYear(int uruYear) {
 
 
 /* 利用した日数を取得する
-   int timeKey キーになる(0,1)
+   int timeKey キーになる
    int currentYear 現在の年代
    int currentMonth　現在の月
    int currentDay　現在の日
 */
 
 int getNumberOfDaysUsed(int timeKey, int currentYear, int currentMonth, int currentDay) {
-  
-  int yearStart, monthStart, dayStart;
+
+  int oldYear, oldMonth, oldDay;
   int yearDiff;
   int uruFlag;
   int uruCount = 0;
@@ -48,44 +52,44 @@ int getNumberOfDaysUsed(int timeKey, int currentYear, int currentMonth, int curr
   //1月〜12月までの日数
   int tukihi[] = {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334};
 
-  EEPROM.get(timeKey, yearStart);
-  EEPROM.get(timeKey + 4, monthStart);
-  EEPROM.get(timeKey + 8, dayStart);
+  EEPROM.get(timeKey, oldYear);
+  EEPROM.get(timeKey + 4, oldMonth);
+  EEPROM.get(timeKey + 8, oldDay);
 
-  Serial.printf("yearStart:%d,monthStart:%d,dayStart:%d", yearStart, monthStart, dayStart);
+  Serial.printf("oldYear:%d,oldMonth:%d,oldDay:%d", oldYear, oldMonth, oldDay);
   Serial.println("");
   Serial.printf("currentYear:%d,currentMonth:%d,currentDay:%d", currentYear, currentMonth, currentDay);
   Serial.println("");
 
-  dayStart += tukihi[monthStart-1];
-  currentDay += tukihi[currentMonth-1];
+  oldDay += tukihi[oldMonth - 1];
+  currentDay += tukihi[currentMonth - 1];
 
-  yearDiff = currentYear - yearStart;
+  yearDiff = currentYear - oldYear;
 
-  if (monthStart < 3) {
-    uruFlag = isLeapYear(yearStart);
+  if (oldMonth < 3) {
+    uruFlag = isLeapYear(oldYear);
     if (uruFlag == 1) {
-      dayStart--;
+      oldDay--;
     }
   }
 
   if (currentMonth >= 3) {
     uruFlag = isLeapYear(currentYear);
     if (uruFlag == 1) {
-      dayStart++;
+      oldDay++;
     }
   }
 
   currentYear--;
 
-  for (int i = currentYear; currentYear > yearStart; currentYear--) {
+  for (int i = currentYear; currentYear > oldYear; currentYear--) {
     uruFlag = isLeapYear(currentYear);
     if (uruFlag == 1) {
       uruCount++;
     }
   }
 
-  currentDay += 365 * yearDiff + uruCount - dayStart;
+  currentDay += 365 * yearDiff + uruCount - oldDay;
   Serial.println("");
   Serial.printf("%d日経過しました", currentDay);
 
