@@ -45,8 +45,6 @@ unsigned long delayTime;
 unsigned bmeStatus;
 static float bmeFloatValue;
 
-const int ledPin = 18;
-
 const int LED_COUNT = 25;
 const int ledPin = 18;
 
