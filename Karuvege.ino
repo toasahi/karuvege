@@ -68,9 +68,12 @@ void setup() {
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
+    
     //通信状況が悪い時リスタート
     if (++wifi_count > 30) {
       Serial.print("リスタート");
+      
+      //1秒で再起動
       esp_sleep_enable_timer_wakeup(1 * 1000 * 1000);
       esp_deep_sleep_start();
     }
