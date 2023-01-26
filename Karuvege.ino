@@ -101,10 +101,6 @@ void loop() {
   int currentMin = currentTime[1];
   int currentDay = currentTime[2];
 
-  getTemperature(); //温度センサ関数
-
-  delay(1000);
-  lcd.clear();
   pixels.clear();
   
   //全点灯する
