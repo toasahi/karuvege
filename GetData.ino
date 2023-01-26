@@ -11,6 +11,7 @@ void getCurrentTime(int currentTime[6]) {
   time_t t;
   struct tm *tm;
   t = time(NULL);
+  tm = localtime(&t);
 
   currentTime[0] = tm->tm_hour;
   currentTime[1] = tm->tm_min;
