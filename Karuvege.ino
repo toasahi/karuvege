@@ -5,6 +5,7 @@ extern void bme280_PROC();
 #include <Wire.h>
 #include <ST7032.h>
 #include <EEPROM.h>
+#include <Adafruit_NeoPixel.h>
 
 #include <HTTPClient.h>
 #include <Adafruit_BME280.h>
@@ -44,7 +45,10 @@ unsigned long delayTime;
 unsigned bmeStatus;
 static float bmeFloatValue;
 
+const int LED_COUNT = 25;
 const int ledPin = 18;
+
+Adafruit_NeoPixel pixels(LED_COUNT, ledPin, NEO_GRB + NEO_KHZ800);
 
 void setup() {
   Serial.begin(115200);
@@ -95,7 +99,14 @@ void loop() {
   int currentMin = currentTime[1];
   int currentDay = currentTime[2];
 
-
+  pixels.clear();
+  
+  //全点灯する
+  for(int i = 0; i < LED_COUNT; i++){
+     pixels.setPixelColor(i, pixels.Color(192, 48, 192));
+  }
+  
+  pixels.show();
   bme280_PROC();  // 環境センサメイン処理部
 
 }
@@ -140,7 +151,6 @@ void print280Values() {
   display.display();
 }
 
-//-------------------------------------------------------------
 // BME280の接続確認
 void setup280() {
   bmeStatus = bme.begin(0x76);
