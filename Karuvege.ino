@@ -2,6 +2,7 @@
 #include <Preferences.h>
 #include <ST7032.h>
 #include <EEPROM.h>
+#include <Adafruit_NeoPixel.h>
 
 #include <HTTPClient.h>
 
@@ -52,6 +53,11 @@ const unsigned long conversionMillsToDate = 86400000;
 
 int currentTime[timeSize];
 
+const int LED_COUNT = 25;
+const int ledPin = 18;
+
+Adafruit_NeoPixel pixels(LED_COUNT, ledPin, NEO_GRB + NEO_KHZ800);
+
 void setup() {
   Serial.begin(115200);
   delay(1000);
@@ -69,7 +75,7 @@ void setup() {
     }
   }
   Serial.println("Connected");
-  
+
   //日本時間の設定
   configTime( JST, 0, "ntp.nict.jp", "time.google.com", "ntp.jst.mfeed.ad.jp");
   configTzTime("JST-9", "ntp.nict.jp", "time.google.com", "ntp.jst.mfeed.ad.jp");
@@ -99,14 +105,14 @@ void setup() {
   EEPROM.begin(16);
 
   getCurrentTime(currentTime);
-  
+
   // 一旦WiFiの接続を止める
   WiFi.disconnect(true);
   WiFi.mode(WIFI_OFF);
 
-  saveNumberOfDaysUsed(timeKey,timeStatus,currentTime[3],currentTime[4],currentTime[5]);
+  saveNumberOfDaysUsed(timeKey, timeStatus, currentTime[3], currentTime[4], currentTime[5]);
   delay(2000);
-  int days = getNumberOfDaysUsed(timeKey,currentTime[3],currentTime[4],currentTime[5]);
+  int days = getNumberOfDaysUsed(timeKey, currentTime[3], currentTime[4], currentTime[5]);
 }
 
 void loop() {
@@ -125,10 +131,16 @@ void loop() {
   lcd.setCursor(0, 1);
   lcd.print(wd[currentDay]);
 
- getTemperature(); //温度センサ関数
+  getTemperature(); //温度センサ関数
 
   delay(1000);
   lcd.clear();
+  pixels.clear();
+  for(int i = 0; i < LED_COUNT; i++){
+     pixels.setPixelColor(i, pixels.Color(192, 48, 192)); // 0番目の色を変える 
+  }
+  
+  pixels.show();
 }
 
 /* モーターを回転させる
@@ -145,17 +157,17 @@ void moterControl(int flag) {
 }
 
 //温度センサの値を取得する関数
-void getTemperature(){
-  
+void getTemperature() {
+
 
   tempAnalogReading = analogRead(voutPin);
 
   //温度を算出
   temperature = (tempAnalogReading - 424) / 6.25; //LM60BIZのデータシートにあった　VO = (+6.25 mV/°C × T °C) + 424 mV　という式を参考にしました。
 
-//  Serial.println("電圧：" + String(tempAnalogReading) + "mV");
-//  Serial.println("温度：" + String(temperature) + "℃");
-  
+  //  Serial.println("電圧：" + String(tempAnalogReading) + "mV");
+  //  Serial.println("温度：" + String(temperature) + "℃");
+
 }
 
 
@@ -163,7 +175,7 @@ void getTemperature(){
    boolean flag 停止：0 開始:1
 */
 
-void temperatureFanControl(boolean flag){
+void temperatureFanControl(boolean flag) {
   if (flag) {
     digitalWrite(temperatureFanPin, HIGH);
   } else {
