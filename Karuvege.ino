@@ -52,15 +52,13 @@ Adafruit_NeoPixel pixels(LED_COUNT, ledPin, NEO_GRB + NEO_KHZ800);
 
 void setup() {
   Serial.begin(115200);
-  delay(1000);
+  delay(3000);
 
   Wire.begin(21, 22); // 端子の定義Wire.begin(SDA,SCL)
   display.init();
   display.setFont(ArialMT_Plain_16);
   display.drawString(0, 0, "ESP32 and OLED");
   display.display();
-
-  setup280();
 
   //WiFi接続
   Serial.print("Connecting to");
@@ -73,9 +71,13 @@ void setup() {
     //通信状況が悪い時リスタート
     if (++wifi_count > 30) {
       Serial.print("リスタート");
+      esp_sleep_enable_timer_wakeup(1 * 1000 * 1000);
+      esp_deep_sleep_start();
     }
   }
   Serial.println("Connected");
+
+  setup280();
 
   //日本時間の設定
   configTime( 3600 * 9, 0, "ntp.nict.jp", "time.google.com", "ntp.jst.mfeed.ad.jp");
@@ -100,12 +102,12 @@ void loop() {
   int currentDay = currentTime[2];
 
   pixels.clear();
-  
+
   //全点灯する
-  for(int i = 0; i < LED_COUNT; i++){
-     pixels.setPixelColor(i, pixels.Color(192, 48, 192));
+  for (int i = 0; i < LED_COUNT; i++) {
+    pixels.setPixelColor(i, pixels.Color(255, 221, 170));
   }
-  
+
   pixels.show();
   bme280_PROC();  // 環境センサメイン処理部
 
@@ -159,6 +161,7 @@ void setup280() {
     display.drawString(16, 16, "Connection");
     display.drawString(32, 32, "Error....!");
     display.display();
+    Serial.println("Loop");
     while (1) delay(10);
   }
   display.drawString(8, 8, "BME280 Ready!");
