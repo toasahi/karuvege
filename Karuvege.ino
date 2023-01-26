@@ -88,8 +88,6 @@ void setup() {
 
   EEPROM.begin(16);
 
-  getCurrentTime(currentTime);
-
   // 一旦WiFiの接続を止める
   WiFi.mode(WIFI_OFF);
 
