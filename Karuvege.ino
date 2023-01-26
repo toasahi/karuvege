@@ -136,8 +136,10 @@ void loop() {
   delay(1000);
   lcd.clear();
   pixels.clear();
+  
+  //全点灯する
   for(int i = 0; i < LED_COUNT; i++){
-     pixels.setPixelColor(i, pixels.Color(192, 48, 192)); // 0番目の色を変える 
+     pixels.setPixelColor(i, pixels.Color(192, 48, 192));
   }
   
   pixels.show();
