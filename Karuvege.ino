@@ -41,11 +41,8 @@ int timeStatus = 0;
 int currentTime[6];
 
 unsigned long delayTime;
-unsigned status;
-static int value;     //analog値を代入する変数を定義
-static float Volts;
-static float FloatValue;
-unsigned static int Val_ad;
+unsigned bmeStatus;
+static float bmeFloatValue;
 
 const int ledPin = 18;
 
@@ -126,28 +123,28 @@ void bme280_PROC() {
 void print280Values() {
   // 温度の計測＆OLED表示
   display.drawString(0, 0, "Temp = ");
-  FloatValue =  bme.readTemperature() ;  // 取得
-  display.drawString( 60 , 0,  String(FloatValue, 8));
+  bmeFloatValue =  bme.readTemperature() ;  // 取得
+  display.drawString( 60 , 0,  String(bmeFloatValue, 8));
   // 気圧の計測＆OLED表示
   display.drawString(0, 16, "Press = ");
-  FloatValue =  bme.readPressure() / 100.0F ;  // 取得
-  display.drawString(60, 16, String (FloatValue, 8));
+  bmeFloatValue =  bme.readPressure() / 100.0F ;  // 取得
+  display.drawString(60, 16, String (bmeFloatValue, 8));
   // 湿度の計測＆OLED表示
   display.drawString(0, 32, "Humi = ");
-  FloatValue =  bme.readHumidity() ;  // 取得
-  display.drawString(60, 32, String (FloatValue, 8));
+  bmeFloatValue =  bme.readHumidity() ;  // 取得
+  display.drawString(60, 32, String (bmeFloatValue, 8));
   // 高度の計測＆OLED表示
   display.drawString(0, 48, "Altitu = ");
-  FloatValue =  bme.readAltitude(SEALEVELPRESSURE_HPA) ;
-  display.drawString(60, 48, String (FloatValue, 8));
+  bmeFloatValue =  bme.readAltitude(SEALEVELPRESSURE_HPA) ;
+  display.drawString(60, 48, String (bmeFloatValue, 8));
   display.display();
 }
 
 //-------------------------------------------------------------
 // BME280の接続確認
 void setup280() {
-  status = bme.begin(0x76);
-  if (!status) {
+  bmeStatus = bme.begin(0x76);
+  if (!bmeStatus) {
     display.drawString(0, 0,  "BME280 sensor");
     display.drawString(16, 16, "Connection");
     display.drawString(32, 32, "Error....!");
