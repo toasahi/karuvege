@@ -5,7 +5,6 @@ extern void bme280_PROC();
 #include <Wire.h>
 #include <ST7032.h>
 #include <EEPROM.h>
-#include <Adafruit_NeoPixel.h>
 
 #include <HTTPClient.h>
 #include <Adafruit_BME280.h>
@@ -13,9 +12,6 @@ extern void bme280_PROC();
 
 #include "Getdata.h"
 #include "NumberOfDaysUsed.h"
-
-// 定数宣言
-#define SEALEVELPRESSURE_HPA (1013.25)    // bme280用定数
 
 //Wifi
 HTTPClient http;
@@ -30,6 +26,7 @@ const char *wd[7] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 const char ssid[] = "C0p2Ec2-WLAN";
 const char password[] = "d6ad418b63849f1d5c2fb20b3389c60787a9504bbe8900e77f4b6871fbc9da48";
 
+const int boublePin = 15;
 const int moterPin = 16;
 const int temperatureFanPin = 17;
 
@@ -41,14 +38,8 @@ int timeStatus = 0;
 
 int currentTime[6];
 
-unsigned long delayTime;
 unsigned bmeStatus;
 static float bmeFloatValue;
-
-const int LED_COUNT = 25;
-const int ledPin = 18;
-
-Adafruit_NeoPixel pixels(LED_COUNT, ledPin, NEO_GRB + NEO_KHZ800);
 
 void setup() {
   Serial.begin(115200);
@@ -59,6 +50,7 @@ void setup() {
   display.setFont(ArialMT_Plain_16);
   display.drawString(0, 0, "ESP32 and OLED");
   display.display();
+  pinMode(boublePin,OUTPUT);
 
   //WiFi接続
   Serial.print("Connecting to");
@@ -100,20 +92,9 @@ void setup() {
 }
 
 void loop() {
-  int currentHour = currentTime[0];
-  int currentMin = currentTime[1];
-  int currentDay = currentTime[2];
-
-  pixels.clear();
-
-  //全点灯する
-  for (int i = 0; i < LED_COUNT; i++) {
-    pixels.setPixelColor(i, pixels.Color(255, 221, 170));
-  }
-
-  pixels.show();
+  digitalWrite(boublePin,HIGH);
+  
   bme280_PROC();  // 環境センサメイン処理部
-
 }
 
 /* モーターを回転させる
@@ -149,10 +130,6 @@ void print280Values() {
   display.drawString(0, 32, "Humi = ");
   bmeFloatValue =  bme.readHumidity() ;  // 取得
   display.drawString(60, 32, String (bmeFloatValue, 8));
-  // 高度の計測＆OLED表示
-  display.drawString(0, 48, "Altitu = ");
-  bmeFloatValue =  bme.readAltitude(SEALEVELPRESSURE_HPA) ;
-  display.drawString(60, 48, String (bmeFloatValue, 8));
   display.display();
 }
 
@@ -169,5 +146,4 @@ void setup280() {
   }
   display.drawString(8, 8, "BME280 Ready!");
   delay(500);
-  delayTime = 500;
 }
